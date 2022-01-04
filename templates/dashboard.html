@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../static/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../static/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Placement Cell-Dashboard</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <!--     Fonts and icons     -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+   <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <!-- CSS Files -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../static/css/light-bootstrap-dashboard.css?v=2.0.0 " rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../static/css/demo.css" rel="stylesheet" />
+    <!--<script src="jquery.csv.min.js"></script>-->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <!--<script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawAreaChart);
+  
+        function drawChart() {
+
+          /*$.get("d:/Placement_Cell.csv", function(csvString) {
+          // transform the CSV string into a 2-dimensional array
+          var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});*/
+          
+          var d = $.ajax({
+                    url: "/populate_Pie/",
+                    type: "POST",
+                    async: false,
+                    success: function(resp){
+                       //JSON.parse(resp);
+                      // return resp;
+                      //$('div#response').append(resp.data);
+                    }
+                  }).responseJSON;
+        
+        console.log(d);
+
+        var data = google.visualization.arrayToDataTable(d);
+
+        /*var data = google.visualization.arrayToDataTable([
+            ['Department', '% of no. of placements'],
+            ['Computer',     53],
+            ['IT',      36],
+            ['EC',  11]
+          ]);*/
+          
+          
+          var options = {
+              legend:"none",
+              colors:['#1DC7EA','#FF4A55','#FF9500']
+          };
+  
+          var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
+  
+          chart.draw(data, options);
+        }
+
+        function drawAreaChart() {
+
+            var d = $.ajax({
+                    url: "/populate_Area/",
+                    type: "POST",
+                    async: false,
+                    success: function(resp){
+                       //JSON.parse(resp);
+                      // return resp;
+                      //$('div#response').append(resp.data);
+                    }
+                  }).responseJSON;
+
+            var data = google.visualization.arrayToDataTable(d);
+          
+          /*var data = google.visualization.arrayToDataTable([['', 'CE', 'IT','EC'],
+            ['2013',  28, 20, 13], 
+            ['2014',  38, 24, 11],
+            ['2015',  49, 29, 17],
+            ['2016',  56, 24, 10],
+            ['2017',  59, 28, 19],
+            ['2018',  62, 33, 23],
+            ['2019',  69, 43, 24],
+            ['2020',  79, 44, 27],
+            ['2021',  81, 47, 27]
+          ]);*/
+  
+          var options = {
+            //legend:{position:'bottom',alignment:'center'},
+            legend:'none',
+            colors:['#1DC7EA','#FF4A55','#FF9500'],
+            areaOpacity:1
+          };
+  
+          var chart = new google.visualization.AreaChart(document.getElementById('AreaChart1'));
+          chart.draw(data, options);
+        }
+      </script>
+      <script type="text/javascript">
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+  
+        function drawChart() {
+
+            var d = $.ajax({
+                    url: "/populate_Column/",
+                    type: "POST",
+                    async: false,
+                    success: function(resp){
+                       //JSON.parse(resp);
+                      // return resp;
+                      //$('div#response').append(resp.data);
+                    }
+                  }).responseJSON;
+
+            var data = google.visualization.arrayToDataTable(d);
+          
+            
+            /*var data = google.visualization.arrayToDataTable([
+            ['', '', ''],
+            ['Jan', 530, 405],
+            ['Feb', 440, 250],
+            ['Mar', 320, 280],
+            ['Apr', 790, 580],
+            ['May',550,450],
+            ['Jun',450,350],
+            ['Jul',327,300],
+            ['Aug',419,370],
+            ['Sep',575,372],
+            ['Oct',609,405],
+            ['Nov',760,620],
+            ['Dec',995,797]
+          ]);*/
+  
+          var options = {
+            legend:{position: 'none'},
+            colors:["#1DC7EA",'#FF4A55'],
+          };
+  
+          var chart = new google.charts.Bar(document.getElementById('columnchart1'));
+  
+          chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+      </script>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <!--Note: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"-->
+        <div class="sidebar" data-image="../static/img/sidebar-2.jpg" data-color="blue">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text" style="font-weight: 900;">
+                        <i class="nc-icon nc-air-baloon"></i>  
+                        Placement Cell
+                    </a>
+                </div>
+                <ul class="nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://127.0.0.1:5000/">
+                            <i class="nc-icon nc-chart-pie-35"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="http://127.0.0.1:5000/user">
+                            <i class="nc-icon nc-circle-09"></i>
+                            <p>User Profile</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="http://127.0.0.1:5000/table">
+                            <i class="nc-icon nc-notes"></i>
+                            <p>Companies</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="http://127.0.0.1:5000/notifications">
+                            <i class="nc-icon nc-bell-55"></i>
+                            <p>Notifications</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="http://127.0.0.1:5000/addData">
+                            <i class="nc-icon nc-cloud-upload-94"></i>
+                            <p>Add Placement Data</p>
+                        </a>
+                    </li>
+                    <li class="nav-item active active-pro">
+                        <a class="nav-link active" href="http://127.0.0.1:5000/upgrade">
+                            <i class="nc-icon nc-alien-33"></i>
+                            <p>Upgrade to PRO</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#pablo"> Good Morning! Kaval Patel, </a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <ul class="nav navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nc-icon nc-zoom-split"></i>
+                                    <span class="d-lg-block">&nbsp;Search</span>
+                                </a>
+                            </li>
+                            <li class="dropdown nav-item">
+                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    <i class="nc-icon nc-bell-55"></i>
+                                    <span class="notification">4</span>
+                                    <span class="d-lg-none">Notification</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Notification 1</a>
+                                    <a class="dropdown-item" href="#">Notification 2</a>
+                                    <a class="dropdown-item" href="#">Notification 3</a>
+                                    <a class="dropdown-item" href="#">Notification 4</a>
+                                    <a class="dropdown-item" href="#">Another notification</a>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pablo">
+                                    <span class="no-icon">Account</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pablo">
+                                    <span class="no-icon">Log out</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <h4 class="card-title">Department Placement</h4>
+                                    <p class="card-category">Computer & IT department got more Placement</p>
+                                </div>
+                                <div class="card-body ">
+                                    <div id="piechart1" style="height: 310px;"></div>
+                                    <div class="legend" style="padding-left: 75px; font-size: 15px;">
+                                        <i class="fa fa-circle text-info"></i> Computer
+                                        <i class="fa fa-circle text-danger"></i> IT
+                                        <i class="fa fa-circle text-warning"></i> EC
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-clock-o"></i> last update 1 day ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card ">
+                                <div class="card-header ">
+                                    <h4 class="card-title">Placement Rate</h4>
+                                    <p class="card-category">Last 9 Year's Performance</p>
+                                </div>
+                                <div class="card-body ">
+                                    <div id="AreaChart1" style="width: '100%'; height: 300px;"></div>
+                                </div>
+                                    <!--
+                                    <script type="text/javascript" src="https://rawgit.com/gionkunz/chartist-js/master/dist/chartist.js"></script>
+                                    <script>
+                                        var dataSales = {labels: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+                                          series: [
+                                          [28, 38, 49, 56, 59, 62, 69, 79, 81],
+                                          [20, 24, 29, 24, 28, 33, 43, 44, 47],
+                                          [13, 11, 17, 10, 19, 23, 24, 27, 27]
+                                          ]
+                                        };
+
+                                        var optionsSales = {
+                                        lineSmooth: false,
+                                        low: 0,
+                                        high: 128,
+                                        showArea: true,
+                                        height: "245px",
+                                        axisX: {
+                                        showGrid: false,
+                                        },
+                                        lineSmooth: Chartist.Interpolation.simple({divisor: 3}),
+                                        showLine: true,
+                                        showPoint: false,
+                                        };
+
+                                        var responsiveSales = [
+                                        ['screen and (max-width: 640px)', {
+                                        axisX: {
+                                            labelInterpolationFnc: function (value) {
+                                            return value[0];
+                                        }
+                                        }
+                                        }]
+                                        ];
+
+                                        Chartist.Line('#chartYears', dataSales, optionsSales, responsiveSales);
+                                    </script>
+                                -->
+                                
+                                <div class="card-footer ">
+                                
+                                    <div class="legend" style="padding-left: 300px;">
+                                        <i class="fa fa-circle text-info"></i> CE
+                                        <i class="fa fa-circle text-danger"></i> IT
+                                        <i class="fa fa-circle text-warning"></i> EC 
+                                    </div>
+                            
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-history"></i> Updated 3 minutes ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card ">
+                                <div class="card-header ">
+                                    <h4 class="card-title">2019-2020 Placement</h4>
+                                    <p class="card-category">Increment in Computer-IT department</p>
+                                </div>
+                                <div class="card-body ">
+                                    <div id="columnchart1" style="height: 300px;"></div>
+                                </div>
+                                <div class="card-footer ">
+                                    
+                                    <div class="legend">
+                                        <i class="fa fa-circle text-info"></i> 2019 
+                                        <i class="fa fa-circle text-danger"></i> 2020
+                                    </div>
+                                    
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-check"></i> Data information certified
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card  card-tasks">
+                                <div class="card-header ">
+                                    <h4 class="card-title">Tasks</h4>
+                                    <p class="card-category">Your today's taks</p>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="table-full-width" style="height: 300px;">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="">
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Prepare portfolio & do final modification</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Buy domain www.kaval.design</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Design AR product start from UX discovery face
+                                                    </td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" checked>
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Meeting with team members</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="">
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Read book "Men search for meaning"</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="" disabled>
+                                                                <span class="form-check-sign"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>Ask brother for buying Manali tickets</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-footer " style="margin-top: 40px;">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav>
+                        <ul class="footer-menu">
+                            <li>
+                                <a href="#">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Company
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Blog
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="copyright text-center">
+                            ©
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>
+                            <a href="#">Rahi Technologies</a>, made with love for a better & meaningful web
+                        </p>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<!--   Core JS Files   -->
+<script src="../static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="../static/js/core/popper.min.js" type="text/javascript"></script>
+<script src="../static/js/core/bootstrap.min.js" type="text/javascript"></script>
+<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+<script src="../static/js/plugins/bootstrap-switch.js"></script>
+
+
+<!--  Google Maps Plugin    -->
+<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>-->
+<!--  Chartist Plugin  -->
+<!--<script src="../static/js/plugins/chartist.min.js"></script>-->
+
+
+<!--  Notifications Plugin    -->
+<script src="../static/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
+<script src="../static/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
+<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
+<script src="../static/js/demo.js"></script>
+
+
+<!--<script type="text/javascript">
+    $(document).ready(function() {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+
+    });
+</script>-->
+
+
+</html>
